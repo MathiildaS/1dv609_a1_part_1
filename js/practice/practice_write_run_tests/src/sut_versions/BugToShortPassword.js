@@ -2,18 +2,18 @@ class Password {
   constructor(pw) {
     const trimmedPW = pw.trim(); // Ta bort mellanslag i början och slutet
 
-    if (this.isTooShort(trimmedPW)) {
-      throw new Error("För kort lösenord");
+    if (this.#isTooShort(trimmedPW)) {
+      throw new Error("Too short password");
     }
 
-    if (!this.containsNumber(trimmedPW)) {
-      throw new Error("Innehåller inget nummer");
+    if (!this.#containsNumber(trimmedPW)) {
+      throw new Error("No number found");
     }
 
-    this.passwordHash = this.simpleHash(trimmedPW);
+    this.passwordHash = this.#simpleHash(trimmedPW);
   }
 
-  simpleHash(input) {
+  #simpleHash(input) {
     let hash = 7;
     for (let i = 0; i < input.length; i++) {
       hash = hash * 31 + input.charCodeAt(i);
@@ -21,19 +21,24 @@ class Password {
     return hash;
   }
 
-  isTooShort(pw) {
-    return pw.length < 11; //BUGG should be 12
+  #isTooShort(pw) {
+    return pw.length < 11;
   }
 
-  containsNumber(text) {
+  #containsNumber(text) {
     return /\d/.test(text);
   }
 
-  getPasswordHash() {
+  #getPasswordHash() {
     return this.passwordHash;
   }
 
   isPasswordSame(other) {
-    return this.passwordHash === other.getPasswordHash();
+    if (!(other instanceof Password)) {
+      throw new Error("Invalid argument");
+    }
+    return this.#getPasswordHash() === other.#getPasswordHash();
   }
 }
+
+module.exports = Password;

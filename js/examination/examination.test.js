@@ -3,9 +3,9 @@
 
 //const Password = require('../src/Password'); // Adjust the path as necessary
 
-describe('Password', () => {
-    test('should return false for passwords without uppercase letter', () => {
-        //expect(Password.isValid('invalid123!')).toBe(false);
+describe('Examination tests', () => {
+    test('placeholder', () => {
+        expect(false).toBe(false);
     });
 
     

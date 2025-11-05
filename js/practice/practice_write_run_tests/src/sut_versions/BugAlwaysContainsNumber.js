@@ -26,7 +26,7 @@ class Password {
   }
 
   #containsNumber(text) {
-    return /\d/.test(text);
+    return true; // Bug: always returns true
   }
 
   #getPasswordHash() {

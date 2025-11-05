@@ -18,7 +18,7 @@ class Password {
     for (let i = 0; i < input.length; i++) {
       hash = hash * 31 + input.charCodeAt(i);
     }
-    return hash;
+    return input; // Bug: returns the input instead of the hash
   }
 
   #isTooShort(pw) {
