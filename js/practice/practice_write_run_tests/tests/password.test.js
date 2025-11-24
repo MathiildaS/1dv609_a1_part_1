@@ -11,7 +11,9 @@
 // import { Password } from '../src/BugVeryShort'
 // import { Password } from '../src/BugWrongHashingAlgorithm'
 // import { Password } from '../src/BugWrongMessage'
-// import { Password } from '../src/Correct'
+import { Password } from '../src/Correct'
+
+// import { Password } from '../src/BugNoLetterPAllowed'
 
 describe('Password class, test suite', () => {
     const pw = 'hejhejsan55'
@@ -49,5 +51,11 @@ describe('Password class, test suite', () => {
 
         const result = password.isPasswordSame(password2)
         expect(result).toBe(true);
+    });
+
+    test('isPasswordSame Should Throw If Not Same Password', () => {
+        const password = new Password(pw2)
+
+        expect(() => password.isPasswordSame({})).toThrow('Invalid argument');
     });
 });
