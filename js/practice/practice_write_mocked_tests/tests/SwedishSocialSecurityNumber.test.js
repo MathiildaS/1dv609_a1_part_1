@@ -1,14 +1,50 @@
-import { SwedishSocialSecurityNumber } from '../src/correct/SwedishSocialSecurityNumber'; 
+import { jest } from "@jest/globals";
 
-
+ import { SwedishSocialSecurityNumber } from '../src/correct/SwedishSocialSecurityNumber';
+// import { SwedishSocialSecurityNumber } from '../src/bugs/BuggySwedishSocialSecurityNumberNoLenCheck'
+// import { SwedishSocialSecurityNumber } from '../src/bugs/BuggySwedishSocialSecurityNumberNoTrim'
+// import { SwedishSocialSecurityNumber } from '../src/bugs/BuggySwedishSocialSecutityNumberNoLuhn'
+// import { SwedishSocialSecurityNumber } from '../src/bugs/BuggySwedishSocialSecutityNumberWrongYear'
 
 //NOTE THESE TESTS SHOULD NOT BE DEPENDENT ON SSNHelper BUT USE MOCKING
-describe('SwedishSocialSecurityNumber Tests', () => {
-    //put constants here to increase readability
+describe("SwedishSocialSecurityNumber Tests", () => {
+  let ssnHelperMock;
+  const stringInput = " 950302-0225 ";
 
-    test('replace this test with one of your own', () => {
-        expect(true).toBe(true);
-    });
+  //Create a new mock for each test
+  beforeEach(() => {
+    ssnHelperMock = {
+      isCorrectLength: jest.fn(),
+      isCorrectFormat: jest.fn(),
+      isValidMonth: jest.fn(),
+      isValidDay: jest.fn(),
+      luhnisCorrect: jest.fn(),
+    };
+  });
 
-    //Add your tests here
+  test("constructor Should Check Length Of Chars", () => {
+    ssnHelperMock.isCorrectLength.mockReturnValue(false);
+    expect(
+      () => new SwedishSocialSecurityNumber(stringInput, ssnHelperMock)
+    ).toThrow("To short, must be 11 characters");
+  });
+
+  test("constructor Should Trim Input", () => {
+    new SwedishSocialSecurityNumber(stringInput, ssnHelperMock);
+    expect(ssnHelperMock.isCorrectFormat).toHaveBeenCalledWith("950302-0225");
+  });
+
+  test("constructor Should Call luhnIsCorrect", () => {
+    new SwedishSocialSecurityNumber(stringInput, ssnHelperMock);
+    expect(ssnHelperMock.luhnisCorrect).toHaveBeenCalled();
+  });
+
+  test("getYear Should Return Correct Year", () => {
+    const ssnInstance = new SwedishSocialSecurityNumber(
+      stringInput,
+      ssnHelperMock
+    );
+    const result = ssnInstance.getYear();
+    expect(result).toBe("95");
+  });
 });
